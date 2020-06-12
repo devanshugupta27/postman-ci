@@ -219,7 +219,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "YWMtGvYgGJs-EeqbCjfeBAnbmAAAAXJabI2LtlBMJm0kVFWFbs_08HzJEj0Nksc~~fc280e3b-9505-11ea-9368-0242ac110003",
+						"value": "{{access-token}}",
 						"type": "text"
 					}
 				],
