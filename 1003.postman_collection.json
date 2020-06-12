@@ -1,0 +1,302 @@
+{
+	"info": {
+		"_postman_id": "f1092f85-4ac2-4872-abb1-aa7386a0f0ac",
+		"name": "1003",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all user spaces",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ba857e52-9b62-42cf-a247-88f4378e6ee9",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"orgid\", jsonData.entities[0].dls_org_id);\r",
+							"\r",
+							"pm.test(\"Testing if the orgid is mqa-sierra-thor\", ()=> {\r",
+							"    pm.expect(jsonData.entities[0].dls_org_id).to.equal(\"mqa-sierra-thor\")\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check Status of Request\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/lb-auth/accounts/{{account-id}}/ext-users/{{ext-user-id}}/spaces",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"lb-auth",
+						"accounts",
+						"{{account-id}}",
+						"ext-users",
+						"{{ext-user-id}}",
+						"spaces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get global entitlement of a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a5a1427d-3968-4082-8f13-3aa95dcc3be3",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"product-code\",jsonData.entities[0].productcode);\r",
+							"\r",
+							"pm.test(\"Check Status of Request\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/lb-product/accounts/{{account-id}}/ext-users/{{ext-user-id}}/entitlements?productDetails=false&bundleDetails=false",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"lb-product",
+						"accounts",
+						"{{account-id}}",
+						"ext-users",
+						"{{ext-user-id}}",
+						"entitlements"
+					],
+					"query": [
+						{
+							"key": "productDetails",
+							"value": "false"
+						},
+						{
+							"key": "bundleDetails",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get access token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "71d9aedd-842d-4ebd-925b-453b06adf1b2",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"user-uuid\",jsonData.user.uuid);\r",
+							"postman.setEnvironmentVariable(\"access-token\",jsonData.access_token);\r",
+							"\r",
+							"pm.test(\"Check Status of Request\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ext_user_id\": \"ed9863961ece499486efd61484d4167b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/lb-auth/auth/{{orgid}}/ext-users/token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"lb-auth",
+						"auth",
+						"{{orgid}}",
+						"ext-users",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get class of a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "32df6af6-b1e3-4f50-9bf7-14eeda58d911",
+						"exec": [
+							"pm.test(\"Check Status of Request\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/lb-auth/org/{{orgid}}/users/{{user-uuid}}/classes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"lb-auth",
+						"org",
+						"{{orgid}}",
+						"users",
+						"{{user-uuid}}",
+						"classes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product item and analytic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5418f2e1-8a35-433d-86e1-dcfc7005d1ef",
+						"exec": [
+							"pm.test(\"Check Status of Request\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "YWMtGvYgGJs-EeqbCjfeBAnbmAAAAXJabI2LtlBMJm0kVFWFbs_08HzJEj0Nksc~~fc280e3b-9505-11ea-9368-0242ac110003",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/lb-analytics/{{orgid}}/user/product/progress/items?userid={{user-uuid}}&productcode={{product-code}}&metrics=true&history=false&expiredView=false&group=false",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"lb-analytics",
+						"{{orgid}}",
+						"user",
+						"product",
+						"progress",
+						"items"
+					],
+					"query": [
+						{
+							"key": "userid",
+							"value": "{{user-uuid}}"
+						},
+						{
+							"key": "productcode",
+							"value": "{{product-code}}"
+						},
+						{
+							"key": "metrics",
+							"value": "true"
+						},
+						{
+							"key": "history",
+							"value": "false"
+						},
+						{
+							"key": "expiredView",
+							"value": "false"
+						},
+						{
+							"key": "group",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0baefaa9-8dd6-4b6f-b6ea-8c84a974cfc0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b1676144-907f-4c1c-be8e-440688e7b324",
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Check Status of Request\", function () {",
+					"    pm.expect(pm.response.code).to.equal(200);",
+					"});",
+					"",
+					"",
+					"pm.test(\"response should be json type\", ()=> {",
+					"    pm.response.to.not.be.error;",
+					"    pm.response.to.not.have.jsonBody(\"error\");",
+					"});",
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
